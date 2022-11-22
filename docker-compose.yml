@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+
+  # Docker BE 
+  app:
+    container_name: mybe
+    networks:
+      - BE
+    environment:
+      - DOCKER=true
+    build: .
+    volumes:
+      # local_folder:conteiner_folder snyc
+      - ./:/app
+      # ignore local node_modules, use container
+      - /app/node_modules
+    ports:
+      - "8081:8081"
+      - "9229:9229"
+    #command: nodemon --inspect=0.0.0.0:9229 --signal SIGINT --nolazy ./index.js
+    # command: dumb-init nodemon -L --verbose --ignore /api --inspect=0.0.0.0:9229 --signal SIGINT --nolazy ./index.js
+    command: dumb-init npm run start:dev
+    depends_on: 
+      - db
+  # Docker DB 
+  db:
+    container_name: mydb
+    networks:
+      - BE
+    image: mysql:8.0
+    # command: --default-authentication-plugin=mysql_native_password --sql_mode=NO_ENGINE_SUBSTITUTION,NO_AUTO_CREATE_USER --explicit_defaults_for_timestamp
+    restart: always
+    environment:
+      - MYSQL_DATABASE=devdb
+      - MYSQL_USER=myuser
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_TCP_PORT=3305
+    ports:
+      - '3305:3305'
+    expose:
+    #   # Opens port 3306 on the container
+      - '3305'
+      # Where our data will be persisted
+    # volumes:
+    #  - my-db:/var/lib/mysql
+networks:
+    BE:
+  #   FE:
+
