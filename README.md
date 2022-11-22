@@ -2,6 +2,11 @@
 # TEST
 
 
+## Installation
+
+```bash
+$ npm install
+```
 
 ## Run Unit Test
 
@@ -13,12 +18,6 @@ $ npm run test
 
  ```bash
 $ npm run test:e2e
-```
-
-## Installation
-
-```bash
-$ npm install
 ```
 
 ## Running locally the app with a local Sqlite DB
